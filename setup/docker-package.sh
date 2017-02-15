@@ -5,6 +5,8 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+apt-get install libapparmor1 -y
+
 wget https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_1.13.1-0~raspbian-jessie_armhf.deb
 dpkg -i ./docker-engine_1.13.1-0~raspbian-jessie_armhf.deb
 service docker start
