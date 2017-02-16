@@ -1,18 +1,26 @@
-# echo "Please select the file from the list"
+#!/bin/bash
+#RUN AS ROOT!
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
 
-# files=$(ls *.txt)
-# i=1
+echo "Please select the file from the list"
+cd ~/backups/pi/
+files=$(ls *.gz)
+i=1
 
-# for j in $files
-# do
-# echo "$i.$j"
-# file[i]=$j
-# i=$(( i + 1 ))
-# done
+for j in $files
+do
+echo "$i. $j"
+file[i]=$j
+i=$(( i + 1 ))
+done
 
 echo "Enter number"
 read input
-echo "You select the file ${file[$input]}"
+filename=${file[$input]}
+echo "Restoring from file $filename"
 
-diskutil unmountDisk /dev/disk1
-gzip -dc ~/backups/pi/pi-$millis.gz | sudo dd of=/dev/rdisk1 bs=1m
+diskutil unmountDisk /dev/disk2
+gzip -dc ~/backups/pi/$filename | dd of=/dev/rdisk2 bs=1m
